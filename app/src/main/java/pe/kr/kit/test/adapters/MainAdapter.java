@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import pe.kr.kit.test.DashBoardActivity;
 import pe.kr.kit.test.data.Item;
 
 public class MainAdapter extends BaseAdapter {
@@ -45,6 +47,16 @@ public class MainAdapter extends BaseAdapter {
         Item item = getItem(position);
         title.setText(item.title);
         content.setText(item.content);
+
+        final int pos = position;
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "current pos" + pos, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
 }

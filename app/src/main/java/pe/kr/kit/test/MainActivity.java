@@ -60,8 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception e) {
                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 } finally {
                     Log.d("TEST", "current status => " + status);
+                    //로그인 성공 되고 화면 이동
+                    //DashboardAcitivity로 이동
+                    //화면 이동시 intent를 통해서 이동이 가능
+                    //조건은 로그인이 성공됐을 경우
                     if(status.equals(LoginStatus.SUCCESS)) {
                         Log.d("TEST", "로그인 성공");
                         // 화면 이동 처리
