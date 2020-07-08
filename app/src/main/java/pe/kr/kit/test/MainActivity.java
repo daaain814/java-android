@@ -2,6 +2,7 @@ package pe.kr.kit.test;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Trace;
 import android.util.Log;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                             status = LoginStatus.ID_ERROR;
                             throw new LoginException(LoginStatus.ID_ERROR);
                         }
-                        if(!id.equals(expectedPwd)) {
+                        if(!pwd.equals(expectedPwd)) {
                             status = LoginStatus.PWD_ERROR;
                             throw new LoginException(LoginStatus.PWD_ERROR);
                         }
@@ -61,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 } finally {
                     Log.d("TEST", "current status => " + status);
+                    if(status.equals(LoginStatus.SUCCESS)) {
+                        Log.d("TEST", "로그인 성공");
+                        // 화면 이동 처리
+                        Intent intent = new Intent(MainActivity.this, DashBoardActivity.class);
+                        startActivity(intent);
+                    }
                 }
 
             }
