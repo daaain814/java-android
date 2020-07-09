@@ -1,5 +1,6 @@
 package pe.kr.kit.test;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -31,6 +32,7 @@ public class DashBoardActivity extends AppCompatActivity {
     List<Item> list;
 
     OnListViewItemClickListener onListViewItemClickListener;
+    MainAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,9 @@ public class DashBoardActivity extends AppCompatActivity {
         list = makeData();
         Log.d("TEST", "list size : " + list.size());
 
-        final MainAdapter myAdapter = new MainAdapter(
-                DashBoardActivity.this,
+//        final MainAdapter myAdapter = new MainAdapter(
+            myAdapter = new MainAdapter(
+            DashBoardActivity.this,
                 list,
                 new OnListViewItemClickListener() {
                     @Override
@@ -53,10 +56,8 @@ public class DashBoardActivity extends AppCompatActivity {
                         );
                         //Detail Acitivity에 값을 넘겨주면 됨
                         Item item = list.get(pos);
-//                        intent.putExtra("title", item.title);
-//                        intent.putExtra("content", item.content);
                         intent.putExtra("item", item);
-                        startActivity(intent);
+                        startActivityForResult(intent, 100);
                     }
                 }
         );
@@ -85,6 +86,45 @@ public class DashBoardActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("TEST", "onActivityResult call");
+        Log.d("TEST", "requestCode :" + requestCode + ", resultCode : " + resultCode + ", data : " + data);
+        if(requestCode == 100) {
+            if(resultCode == RESULT_OK) {
+                //삭제버튼을 클릭해서 종료를 한겁니다.
+                Log.d("TEST", "RESULT OK!!");
+                String mode = data.getStringExtra("mode");
+                if(mode.equals("delete")) {
+                    Log.d("TEST", "DELETE COME");
+                    int id = data.getIntExtra("id", -1);
+                    if(id > -1) {
+                        Log.d("TEST", "ID IS NOT NULL " + id);
+                        // 삭제 처리 하는 함수
+                        delete(id);
+                    }
+                }
+            }
+        }
+    }
+
+    private void delete(int pos) {
+        // id에 맞는 ITEM 을 찾아서 삭제처리
+        int tempPos = -1;
+        for(int i=0;i<list.size();i++) {
+            Item item = list.get(i);
+            if(item.id == pos) {
+                tempPos = i;
+                break;
+            }
+        }
+
+        list.remove(tempPos);
+
+        //화면 갱신
+        myAdapter.notifyDataSetChanged();
+    }
 
 
 //
