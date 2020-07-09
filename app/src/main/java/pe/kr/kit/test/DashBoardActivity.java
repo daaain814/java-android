@@ -2,6 +2,7 @@ package pe.kr.kit.test;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,9 @@ public class DashBoardActivity extends AppCompatActivity {
 
     ListView lv;
     List<Item> list;
+
+    OnListViewItemClickListener onListViewItemClickListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,25 @@ public class DashBoardActivity extends AppCompatActivity {
         list = makeData();
         Log.d("TEST", "list size : " + list.size());
 
-        final MainAdapter myAdapter = new MainAdapter(DashBoardActivity.this, list);
+        final MainAdapter myAdapter = new MainAdapter(
+                DashBoardActivity.this,
+                list,
+                new OnListViewItemClickListener() {
+                    @Override
+                    public void onListViewClicked(int pos) {
+                        Intent intent = new Intent(
+                                DashBoardActivity.this,
+                                DetailAcitivity.class
+                        );
+                        //Detail Acitivity에 값을 넘겨주면 됨
+                        Item item = list.get(pos);
+//                        intent.putExtra("title", item.title);
+//                        intent.putExtra("content", item.content);
+                        intent.putExtra("item", item);
+                        startActivity(intent);
+                    }
+                }
+        );
         lv.setAdapter(myAdapter);
 
 //        lv.setOnItemClickListener(onItemClickListener);
@@ -49,7 +71,8 @@ public class DashBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("TEST", "click floating action button");
                 //List에 데이터를 추가하는 것
-                Item item = new Item("title" + list.size(), "current" + list.size());
+//                Item item = new Item("title" + list.size(), "current" + list.size());
+                Item item = new Item(list.size(), "title" + list.size(), "content" + list.size());
                 list.add(item);
                 Log.d("TEST", "current list size => " + list.size());
                 //리스트뷰를 갱신을 해줘야 함
@@ -61,6 +84,8 @@ public class DashBoardActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 //
 //    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
@@ -76,7 +101,8 @@ public class DashBoardActivity extends AppCompatActivity {
         //반복문을 사용해서 여러개의 아이템을 추가
         List list = new ArrayList<Item>();
         for (int i=0; i<10; i++) {
-            Item item = new Item("title" + i, "content1" + i);
+//            Item item = new Item("title" + i, "content1" + i);
+            Item item = new Item(i, "title" + i, "content" + i);
             list.add(item);
         }
         return list;

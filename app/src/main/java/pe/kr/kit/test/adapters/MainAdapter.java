@@ -11,15 +11,23 @@ import android.widget.Toast;
 import java.util.List;
 
 import pe.kr.kit.test.DashBoardActivity;
+import pe.kr.kit.test.OnListViewItemClickListener;
 import pe.kr.kit.test.data.Item;
 
 public class MainAdapter extends BaseAdapter {
     Context context;
     List<Item> items;
+    OnListViewItemClickListener onListViewItemClickListener;
 
-    public MainAdapter(Context context, List<Item> items) {
+
+    interface OnListItemClickListener {
+
+    }
+
+    public MainAdapter(Context context, List<Item> items, OnListViewItemClickListener onListViewItemClickListener) {
         this.context = context;
         this.items = items;
+        this.onListViewItemClickListener = onListViewItemClickListener;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class MainAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "current pos" + pos, Toast.LENGTH_SHORT).show();
+                onListViewItemClickListener.onListViewClicked(pos);
             }
         });
 
